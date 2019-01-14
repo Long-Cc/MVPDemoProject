@@ -6,6 +6,7 @@ import com.kotlin.longc.base.injection.module.ActivityModule
 import com.kotlin.longc.base.injection.module.LifecycleProviderModule
 import com.kotlin.longc.base.injection.scope.ActivityScope
 import com.trello.rxlifecycle.LifecycleProvider
+import com.trello.rxlifecycle.android.ActivityEvent
 import dagger.Component
 
 /**
@@ -16,5 +17,5 @@ import dagger.Component
 interface ActivityComponent {
     fun activity(): Activity
     fun context(): Context
-    fun lifecycleProvider(): LifecycleProvider<*>
+    fun lifecycleProvider(): LifecycleProvider<ActivityEvent>
 }

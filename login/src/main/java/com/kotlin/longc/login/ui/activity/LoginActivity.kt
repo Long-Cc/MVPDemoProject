@@ -15,7 +15,7 @@ class LoginActivity : BaseMvpActivity<LoginPresenter>(), LoginView {
 
     override fun onLoginResult(result: String) {
         Log.d("TAG", result)
-        //toast(result)
+        toast(result)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

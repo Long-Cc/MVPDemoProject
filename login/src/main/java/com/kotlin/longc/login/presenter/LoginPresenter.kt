@@ -7,6 +7,9 @@ import com.kotlin.longc.login.data.protocol.LoginResp
 import com.kotlin.longc.login.presenter.view.LoginView
 import com.kotlin.longc.login.service.LoginService
 import com.kotlin.longc.login.service.impl.LoginServiceImpl
+import com.trello.rxlifecycle.android.ActivityEvent
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -19,12 +22,20 @@ class LoginPresenter @Inject constructor() : BasePresenter<LoginView>() {
     @Inject
     lateinit var loginService:LoginService
     fun login() {
+        //mView.onLoginResult("45")
+//        loginService.getLogin()
+//                .execute(object : BaseSubscriber<List<LoginResp>>() {
+//                    override fun onNext(t: List<LoginResp>) {
+//                        mView.onLoginResult(t[3].title)
+//                    }
+//                }, lifecycleProvider)
         loginService.getLogin()
-                .execute(object : BaseSubscriber<List<LoginResp>>() {
-                    override fun onNext(t: List<LoginResp>) {
-                        mView.onLoginResult(t[1].title)
-                    }
-                }, lifecycleProvider)
+                .compose(lifecycleProvider.bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    mView.onLoginResult(it[3].title)
+                }
 
 
     }

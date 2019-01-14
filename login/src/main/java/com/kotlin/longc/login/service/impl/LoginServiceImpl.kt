@@ -16,14 +16,12 @@ class LoginServiceImpl @Inject constructor() : LoginService{
     lateinit var repository:LoginRepository
     override fun getLogin(): Observable<List<LoginResp>> {
         return repository.getLoginInfo()
-                .flatMap(object :Func1<BaseResp<List<LoginResp>>, Observable<List<LoginResp>>>{
-                    override fun call(t: BaseResp<List<LoginResp>>): Observable<List<LoginResp>> {
-                        if (!t.error) {
-                            return Observable.just(t.results)
-                        } else {
-                            return Observable.error(Exception("未获取数据"))
-                        }
+                .flatMap { t ->
+                    if (!t.error) {
+                        Observable.just(t.results)
+                    } else {
+                        Observable.error(Exception("未获取数据"))
                     }
-                })
+                }
     }
 }
